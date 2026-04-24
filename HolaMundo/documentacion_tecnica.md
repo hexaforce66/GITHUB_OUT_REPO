@@ -1,37 +1,30 @@
 # Documentación de Modernización: HolaMundo
 
 ## 1. Resumen Funcional
-El programa COBOL 'Gestión de Saldo' realiza transacciones financieras en cuenta bancaria. Muestra el nombre del cliente, su saldo inicial y las transacciones realizadas. Simula un proceso de retiro o depósito en función del tipo de transacción ingresada.
-
-Variablemente, WS-TIPO-TRANS 'R' representa una transacción de retiro y 'D' una de depósito.
+El programa COBOL 'Gestión de Saldo' muestra el nombre y saldo inicial de un cliente, simula una transacción de retiro o depósito en función del tipo de transacción ingresado, y realiza los cálculos correspondientes. Luego, muestra un mensaje de éxito/fallo y el saldo final actualizado.
 
 ## 2. Glosario de Variables Bancarias
-- **WS-SAL-ACT**: Saldo Actual de la Cuenta
-- **WS-TIPO-TRANS**: Tipo de Transacción
-- **WS-MONTO**: Monto de la Transacción
+- **WS-SAL-ACT**: Saldo Actual
 - **WS-CLIENTE**: Información del Cliente
+- **WS-TRANSACCION**: Detalles de la Transacción
 
 ## 3. Reglas de Negocio Detectadas
-- Si el tipo de transacción es 'D', se suma el monto al saldo actual.
-- Si el tipo de transacción es 'R', se resta el monto del saldo actual, siempre que este sea suficiente. De lo contrario, muestra un mensaje de error.
+- Si el tipo de transacción es 'D', se suma el monto a WS-SALDO-ACTUAL
+- Si el tipo de transacción es 'R', se resta el monto de WS-SALDO-ACTUAL siempre que el saldo sea suficiente
 
 ## 4. Diagrama de Proceso (BPMN)
 ```mermaid
 graph LR
-    A[Inicio de Transacción] --> B(Mostrar Datos Cliente) --> C{
-Procesar Transacción}
-    C --> |Condición: WS-TIPO-TRANS == 'D'
-    D(Depósito) --> E(Suma monto)
-    C --> |Condición: WS-TIPO-TRANS == 'R'
-    F(Retiro)
-    F --> |Condición: WS-SALDO-ACTUAL >= WS-MONTO
-    G(Éxito) --> H(Resta monto)
-    F --> |Condición: WS-SALDO-ACTUAL < WS-MONTO
-    I(Error) --> J(Mostrar Mensaje)
-    H,G --> J
-    J --> K[Fin de Proceso]
-    click D ../depositar
-    click F ../retirar
-    click G ../exitoso
-    click I ../insuficiente
+
+A[Inicio de Transacción] -->|Muestra datos| B(Mostrar Saldo)
+
+B --> C(Procesar Transacción)
+
+C -->|Calcular| D[Fin de Proceso]
+
+classDef box fill:#f9f,stroke:#333,stroke-width:2px
+class A,D box
+click B link:/url
+
+
 ```
