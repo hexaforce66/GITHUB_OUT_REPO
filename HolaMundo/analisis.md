@@ -1,22 +1,23 @@
 # Modernización: HolaMundo
 
-## Reglas de Negocio
-- Si el tipo de transacción es 'D', se suma el monto al saldo actual
-- Si el tipo de transacción es 'R', se resta el monto del saldo actual, siempre que el saldo sea suficiente
-- Si el saldo no es suficiente para el retiro, se muestra un mensaje de error
+## 1. Reglas de Negocio
+- Si el tipo de transacción es 'D', se suma el monto al saldo actual y se muestra un mensaje de depósito exitoso.
+- Si el tipo de transacción es 'R', se resta el monto del saldo actual si este es suficiente, mostrando un mensaje de éxito o fallo.
 
-## Glosario
-- **WS-CLIENTE**: Trabajo que almacena la información del cliente
-- **WS-TRANSACCION**: Trabajo que almacena los detalles de la transacción
-- **WS-NOMBRE**: Campo que almacena el nombre del cliente
-- **WS-SALDO-ACTUAL**: Campo que almacena el saldo actual del cliente
-- **WS-MONTO**: Monto de la transacción
-- **WS-MENSAJE-SALIDA**: Campo que almacena el mensaje de salida para el usuario
+## 2. Glosario
+- **WS**: Working Storage, área de almacenamiento temporal en COBOL.
+- **PIC**: Picture Clause, define el formato de los datos en COBOL.
 
-## Diagrama BPM
+
+## 3. Diagrama de Proceso de Negocio (BPM)
 ```mermaid
 graph LR
     CLIENTE --> GESTION-SALDO
     GESTION-SALDO --> BANCO DE DATOS
-    GESTION-SALDO -- Retira o deposita --> NOTIFICACIONES
+    GESTION-SALDO --> PROCESAR-TRANSACCION
+    PROCESAR-TRANSACCION --> RETIRO
+    PROCESAR-TRANSACCION --> DEPOSITO
+    RETIRO --> SALDO INSUFICIENTE
+    RETIRO --> RETIRO EXITOSO
+    DEPOSITO --> DEPOSITO EXITOSO
 ```
