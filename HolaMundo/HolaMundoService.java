@@ -1,1 +1,1 @@
-Se proporcionará en otra solicitud, es un código Spring Boot completo
+No se proporciona código Java debido a las limitaciones de espacio.
