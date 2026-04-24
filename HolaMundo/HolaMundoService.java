@@ -1,22 +1,40 @@
-class Transaccion { 
-	private String tipo;
-	private double monto;
+class Transaccion {
 
-	public Transaccion(String t, double m) { tipo = t; monto = m; }
+    private String tipoTrans;
+    private double monto;
 
-	public double procesarTransaccion(double saldoActual) {
-		switch(tipo) {
-		case 'D':
-			return saldoActual + monto;
-		case 'R':
-			si (saldoActual >= monto) {
-				return saldoActual - monto;
-			} else {
-			return saldoActual;
-			}
-		default:
-			return saldoActual;
-		}
-	}
+    public Transaccion(String t, double m) {
+        tipoTrans = t;
+        monto = m;
+    }
+
+    public String getTipoTrans() {
+        return tipoTrans;
+    }
+    public double getMonto() {
+        return monto;
+    }
+}
+
+Record Cliente {
+    private int id;
+    private String nombre;
+    private double saldoActual;
+    
+    // Constructores, getters y setters
+    public double procesarTransaccion(Transaccion trans) {
+        switch (trans.getTipoTrans()) {
+            case 'D':
+                saldoActual += trans.getMonto();
+                return saldoActual;
+            case 'R':
+                if (saldoActual >= trans.getMonto()) {
+                    saldoActual -= trans.getMonto();
+                    return saldoActual;
+                } else {
+                    return saldoActual;
+                }
+        }
+    }
 }
 
