@@ -1,30 +1,31 @@
 # Documentación de Modernización: HolaMundo
 
 ## 1. Resumen Funcional
-El programa gestiona los saldos de los clientes, mostrando el saldo inicial, procesando una transacción de retiro o depósito y mostrando el saldo final. Utiliza un mensaje para indicar el éxito o fracaso de la transacción.
+El programa gestiona los saldos de los clientes, mostrando el saldo inicial, procesando una transacción de depósito o retiro y mostrando el saldo final. Utiliza un código de transacción para determinar el tipo de operación.
 
 ## 2. Glosario de Variables Bancarias
 - **WS-SAL-ACT**: Saldo Actual
-- **WS-CLIENTE**: Información del Cliente
-- **WS-TRANSACCION**: Detalles de la Transacción
+- **WS-CLIENTE**: Información del cliente
+- **WS-TRANSACCION**: Detalles de la transacción
 
 ## 3. Reglas de Negocio Detectadas
 - Si el tipo de transacción es 'D', se suma el monto a WS-SALDO-ACTUAL
-- Si el tipo de transacción es 'R' y el saldo actual es mayor o igual al monto, se resta el monto del saldo; de lo contrario, se informa que el saldo es insuficiente
+- Si el tipo de transacción es 'R', se resta el monto del saldo actual siempre que este sea suficiente
 
 ## 4. Diagrama de Proceso (BPMN)
 ```mermaid
 graph LR
+A[Inicio de Transacción] --> B(Mostrar saldo inicial)
+B --> C(Procesar transacción)
+C --> D(Mostrar saldo final)
 
-subgraph Programa Principal
-CLIENTE -->|mostrar| INICIO DE TRANSACCION
-CLIENTE -->|mostrar| SALDO INICIAL
-PROCESAR-TRANSACCION --> FIN DE PROCESO
+subgraph Procesar Transacción
+style dashed
+label Procesar-Transacción
+D[Depósito \n(WS-TIPO-TRANS = 'D')] --> E(Agregar monto a saldo)
+D --> F(Retiro) 
+F -->|Saldo suficiente| G(Restar monto del saldo)
+F -->|Saldo insuficiente| H(Mensaje de error)
 end
 
-subgraph Procesar Transaccion
-D --> DEPÓSITO
-R -
-   > RETIRO
-end
 ```
