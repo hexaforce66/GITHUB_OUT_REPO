@@ -1,23 +1,22 @@
 # Modernización: HolaMundo
 
 ## Reglas de Negocio
-- El mensaje 'Hola Mundo' se muestra en la pantalla.
+- Si el tipo de transacción es 'D', se suma el monto al saldo actual
+- Si el tipo de transacción es 'R', se resta el monto del saldo actual, siempre que el saldo sea suficiente
+- Si el saldo no es suficiente para el retiro, se muestra un mensaje de error
 
 ## Glosario
-- **COBOL**: Un lenguaje de programación antiguo pero aún utilizado en algunos sistemas legacy.
+- **WS-CLIENTE**: Trabajo que almacena la información del cliente
+- **WS-TRANSACCION**: Trabajo que almacena los detalles de la transacción
+- **WS-NOMBRE**: Campo que almacena el nombre del cliente
+- **WS-SALDO-ACTUAL**: Campo que almacena el saldo actual del cliente
+- **WS-MONTO**: Monto de la transacción
+- **WS-MENSAJE-SALIDA**: Campo que almacena el mensaje de salida para el usuario
 
 ## Diagrama BPM
 ```mermaid
 graph LR
-
-A --> B
-
-classDef n fill:#f9f,stroke:#333,stroke-width:4px
-class n {
-  rect
-  text
-}
-
-A(Display) -->|Imprime en pantalla| B(Stop Run)
-B -->|Termina el programa| A
+    CLIENTE --> GESTION-SALDO
+    GESTION-SALDO --> BANCO DE DATOS
+    GESTION-SALDO -- Retira o deposita --> NOTIFICACIONES
 ```
