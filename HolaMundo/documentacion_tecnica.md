@@ -1,30 +1,50 @@
 # Documentación de Modernización: HolaMundo
 
 ## 1. Resumen Funcional
-El programa COBOL 'Gestión de Saldo' muestra el nombre y saldo inicial de un cliente, simula una transacción de retiro o depósito en función del tipo de transacción ingresado, y realiza los cálculos correspondientes. Luego, muestra un mensaje de éxito/fallo y el saldo final actualizado.
+El programa COBOL 'Gestión de Saldo' realiza transacciones financieras en cuenta bancaria. Muestra el nombre del cliente, su saldo inicial y las transacciones realizadas. Simula un proceso de retiro o depósito en función del tipo de transacción ingresado. Incluye validaciones para asegurar que el saldo sea suficiente en los retiros.
 
 ## 2. Glosario de Variables Bancarias
 - **WS-SAL-ACT**: Saldo Actual
-- **WS-CLIENTE**: Información del Cliente
-- **WS-TRANSACCION**: Detalles de la Transacción
+- **R**: Retiro
+- **D**: Depósito
+- **WS-MONTO**: Monto de la Transacción
 
 ## 3. Reglas de Negocio Detectadas
-- Si el tipo de transacción es 'D', se suma el monto a WS-SALDO-ACTUAL
-- Si el tipo de transacción es 'R', se resta el monto de WS-SALDO-ACTUAL siempre que el saldo sea suficiente
+- Si el tipo de transacción es 'D', se suma el monto transaccionado al saldo actual.
+- Si el tipo de transacción es 'R', se resta el monto de la transacción del saldo actual, siempre que el saldo sea suficiente.
 
 ## 4. Diagrama de Proceso (BPMN)
 ```mermaid
 graph LR
 
-A[Inicio de Transacción] -->|Muestra datos| B(Mostrar Saldo)
+style default fill:#FDF6E3,stroke:#666,stroke-width:4px
 
-B --> C(Procesar Transacción)
+subgraph Grupo de Cliente
 
-C -->|Calcular| D[Fin de Proceso]
+C[CLIENTE] -->|ID| 12345
+C -->|NOMBRE| JUAN PEREZ
+C -->|SALDO| $5000
 
-classDef box fill:#f9f,stroke:#333,stroke-width:2px
-class A,D box
-click B link:/url
+end
 
+C --> P
+
+subgraph Proceso Transaccion
+
+P -->|INICIO|>
+
+P --> PROCESAR
+
+PROCESAR -->|TIPO?| D
+PROCESAR(D) -->|ADDS| R
+
+PROCESAR(R) -->|MONTO?| 
+
+PROCESAR(R) -.->|OK| FIN
+PROCESAR(R) -.->|ERR| FIN
+
+FIN -->|FIN|>
+
+end
 
 ```
